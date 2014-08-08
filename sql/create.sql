@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS exchange_pair_hour (
-    exchange VARCHAR(10),
+    exchange VARCHAR(20),
     source VARCHAR(10),
     sink VARCHAR(10),
     hour TIMESTAMP,
