@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS exchange_pair_hour (
     exchange VARCHAR(10),
-    source VARCHAR(5),
-    sink VARCHAR(5),
+    source VARCHAR(10),
+    sink VARCHAR(10),
     hour TIMESTAMP,
     price_low DECIMAL,
     price_25th_percentile DECIMAL,
