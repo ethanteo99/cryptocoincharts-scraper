@@ -6,6 +6,7 @@ import os
 import pg
 import sys
 import time
+import traceback
 
 
 # Helper for file writing
@@ -21,7 +22,10 @@ def writeToFile(content, prefix, extension):
 cursor = pg.dictCursor()
 
 # Set logging level
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s:%(message)s',
+    datefmt='%m/%d/%Y %I:%M:%S %p')
 
 # Pull in the list of exchanges
 logging.info("Starting scrape of exchange list.")
@@ -92,8 +96,19 @@ for exchangePair in exchangePairs:
         exchangePair["source"], exchangePair["sink"],
         exchangePair["exchange"], pvTime, "1h"
     ]
-    priceVolumeJsonDump = cryptocoincharts.requestPriceVolume(
-        *priceVolumeParams)
+    try:
+        priceVolumeJsonDump = cryptocoincharts.requestPriceVolume(
+            *priceVolumeParams)
+    except Exception as e:
+        priceVolumeStr = "-".join(priceVolumeParams)
+        print '-'*60
+        print "Could not request URL for price volume {0}:".format(
+            priceVolumeStr)
+        print traceback.format_exc()
+        print '-'*60
+        logging.info("Could not request URL for price volume {0}:".format(
+            priceVolumeStr))
+        continue
     writeToFile(
         priceVolumeJsonDump,
         "price_volume_{0}".format("_".join(priceVolumeParams)),
