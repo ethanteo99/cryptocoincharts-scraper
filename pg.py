@@ -14,7 +14,9 @@ targetTable = "exchange_pair_hour"
 
 # Pull in postgres configuration information
 # Pull in postgres configuration information
-dbcFile = open('.pgpass', 'r')
+dbcFile = open(
+    "{0}/.pgpass".format(os.path.dirname(os.path.abspath(__file__))),
+    'r')
 dbcRaw = dbcFile.readline().strip().split(':')
 dbcParams = {
     'database': dbcRaw[2],
